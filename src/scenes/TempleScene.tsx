@@ -14,25 +14,28 @@ export default function TempleScene() {
             <meshStandardMaterial color="#8b7355" />
         </mesh>
         //Add 4 pillars
+
         <mesh position={[-2.5, 1.9, -1.5]} >
             <boxGeometry args={[0.3, 3, 0.3]} />
             <meshStandardMaterial color="#593b2b" />
         </mesh>
+
         <mesh position={[2.5, 1.9, -1.5]} >
             <boxGeometry args={[0.3, 3, 0.3]} />
             <meshStandardMaterial color="#593b2b" />
         </mesh>
+
         <mesh position={[-2.5, 1.9, 1.5]} >
             <boxGeometry args={[0.3, 3, 0.3]} />
             <meshStandardMaterial color="#593b2b" />
         </mesh>
+
         <mesh position={[2.5, 1.9, 1.5]} >
             <boxGeometry args={[0.3, 3, 0.3]} />
             <meshStandardMaterial color="#593b2b" />
         </mesh>
 
         //End Add 4 pillars
-
         <mesh rotation={[-Math.PI / 2, 0, 0]} >
             <planeGeometry args={[12, 12]} />
             <meshStandardMaterial color="#c8b99c" />
