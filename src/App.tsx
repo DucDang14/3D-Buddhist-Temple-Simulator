@@ -5,7 +5,7 @@ function App() {
   return (
     <main>
       <h1>Online Pagoda</h1>
-      <p>Drag to orbit the scene. Scroll to zoom.</p>
+      <p>Welcome to the Online Pagoda!</p>
       
       <div className="scene-container">
         <TempleScene />
