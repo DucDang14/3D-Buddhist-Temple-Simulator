@@ -1,11 +1,12 @@
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
 import { KeyboardControls } from "@react-three/drei";
 import TemplePillar from "../components/TemplePillar";
 import TempleAltar from "../components/TempleAltar";
 import Player from "../player/Player";
-import { HALL, ALTAR_POSITION, INCENSE_BURNER_POSITION, BOWING_POSITION } from "../config/templeLayout";
+import { HALL, ALTAR_POSITION, INCENSE_BURNER_POSITION, BOWING_POSITION, BELL_POSOTION, LISTENING_POSITION } from "../config/templeLayout";
 import IncenseTable from "../components/IncenseTable";
+import TempleBell from "../components/TempleBell";
+import ListeningStand from "../components/ListeningStand";
 
 
 export default function TempleScene() {
@@ -25,7 +26,7 @@ export default function TempleScene() {
         ]}
       >
         {/* Rendering surface and temporary inspection camera */}
-        <Canvas camera={{ position: [10, 9, 13], fov: 50 }}>
+        <Canvas camera={{ position: [0, 2.6, 8.5], fov: 50 }}>
           {/* Scene background and basic lighting; shadows are not enabled yet. */}
           <color attach="background" args={["#f5f0e6"]} />  
           <ambientLight intensity={0.56} />
@@ -47,6 +48,10 @@ export default function TempleScene() {
         {/* Main altar and a separate incense table closer to the entrance */}
         <TempleAltar position={ALTAR_POSITION} />
         <IncenseTable position={INCENSE_BURNER_POSITION} />
+        <TempleBell position={BELL_POSOTION} />
+
+        {/* Future chanting selection point; no interaction yet */}
+        <ListeningStand position={LISTENING_POSITION} />
 
         {/* Layout marker only; half its thickness keeps it above the platform. */}
         <mesh position={[BOWING_POSITION[0], BOWING_POSITION[1] + 0.025, BOWING_POSITION[2]]}>
@@ -68,7 +73,6 @@ export default function TempleScene() {
 
         {/* Controllable character; mouse orbit is for inspecting the layout. */}
         <Player />
-        <OrbitControls target={[0, 1.5, 0]} />
         </Canvas>
     </KeyboardControls>
     )

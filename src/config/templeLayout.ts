@@ -27,5 +27,8 @@ export const INCENSE_BURNER_POSITION: [number, number, number] = [0, HALL.platfo
 // Reserve a bowing area in front of the incense table.
 export const BOWING_POSITION: [number, number, number] = [0, HALL.platformHeight, -1.8];
 
-
+// Left side of the hall, outside the central aisle
+export const BELL_POSOTION: [number, number, number] = [-3, HALL.platformHeight, -4];
     
+//Right side of the hall, opposite the bell
+export const LISTENING_POSITION: [number, number, number] = [3, HALL.platformHeight, -4];
