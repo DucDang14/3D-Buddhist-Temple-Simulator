@@ -1,12 +1,15 @@
 import { useState } from "react";
 
+// Local position within the incense table's group.
 type IncenseBurnerProps = {
   position: [number, number, number];
 };
 
 export default function IncenseBurner({ position }: IncenseBurnerProps) {
+  // Lighting lasts for this component's lifetime and resets on a page reload.
   const [isLit, setIsLit] = useState(false);
 
+  // Child meshes share this click handler; stop the event reaching parent groups.
   return (
     <group position={position} onClick={ (event) => {
       event.stopPropagation();
@@ -23,7 +26,7 @@ export default function IncenseBurner({ position }: IncenseBurnerProps) {
         />
       </mesh>
 
-      {/* Ash surface */}
+      {/* Ash sits just above the vessel top to avoid overlapping-surface flicker. */}
       <mesh
         position={[0, 0.302, 0]}
         rotation={[-Math.PI / 2, 0, 0]}
@@ -31,13 +34,13 @@ export default function IncenseBurner({ position }: IncenseBurnerProps) {
         <circleGeometry args={[0.22, 24]} />
         <meshStandardMaterial color="#b5aaa0" />
       </mesh>
-      {/* Incense sticks */}
+      {/* Single placeholder incense stick */}
       <mesh position={[0, 0.55, 0]}>
         <cylinderGeometry args={[0.012, 0.012, 0.5, 8]} />
         <meshStandardMaterial color="#795438" />
       </mesh>
 
-      {/*Incense tips */}
+      {/* State changes the tip's color and emission; it does not light nearby objects. */}
       <mesh position={[0, 0.805, 0]}>
         <sphereGeometry args={[0.018, 8, 8]} />
         <meshStandardMaterial
