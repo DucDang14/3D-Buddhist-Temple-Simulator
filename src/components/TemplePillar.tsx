@@ -1,3 +1,5 @@
+import { HALL } from "../config/templeLayout";
+
 type TemplePillarProps = {
   position: [number, number, number];
 };
@@ -5,8 +7,8 @@ type TemplePillarProps = {
 export default function TemplePillar({ position }: TemplePillarProps) {
   return (
     <mesh position={position}>
-      <boxGeometry args={[0.3, 3, 0.3]} />
-      <meshStandardMaterial color="#593b2b" />
+      <boxGeometry args={[0.3, HALL.pillarHeight, 0.3]} />
+      <meshStandardMaterial color="#70392e" />
     </mesh>
   );
 }

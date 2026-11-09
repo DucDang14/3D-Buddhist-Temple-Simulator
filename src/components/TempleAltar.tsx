@@ -1,4 +1,4 @@
-import IncenseBurner from "./IncenseBurner";
+
 type TempleAltarProps = {
   position: [number, number, number];
 };
@@ -16,8 +16,6 @@ export default function TempleAltar({ position }: TempleAltarProps) {
         <boxGeometry args={[2.2, 0.2, 1]} />
         <meshStandardMaterial color="#8b4935" />
       </mesh>
-      {/* Incense burner */}
-      <IncenseBurner position={[0, 1, 0]} />
 
     </group>
   );

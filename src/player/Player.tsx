@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useKeyboardControls } from "@react-three/drei";
 import { Group, MathUtils } from "three";
+import { PLAYER_SPAWN, PLAYER_BOUNDS } from "../config/templeLayout";
 
 type MovementAction = "forward" | "backward" | "left" | "right";
 
@@ -27,11 +28,11 @@ export default function Player() {
         player .position.x += (x / length) * distance;
         player .position.z += (z / length) * distance;
 
-        player.position.x = MathUtils.clamp(player.position.x, -2.2, 2.2);
-        player.position.z = MathUtils.clamp(player.position.z, 0, 1.5);
+        player.position.x = MathUtils.clamp(player.position.x, PLAYER_BOUNDS.minX, PLAYER_BOUNDS.maxX);
+        player.position.z = MathUtils.clamp(player.position.z, PLAYER_BOUNDS.minZ, PLAYER_BOUNDS.maxZ);
     });
     return (
-      <group ref={PlayerRef} position={[0, 0.4, 1]}>
+      <group ref={PlayerRef} position={PLAYER_SPAWN}>
         {/* Player body */}
         <mesh position={[0, 0.5, 0]}>
           <boxGeometry args={[0.4, 1, 0.3]} />
