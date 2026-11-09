@@ -1,6 +1,7 @@
 import { useRef } from "react";
+import type { ComponentRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { useKeyboardControls } from "@react-three/drei";
+import { OrbitControls, useKeyboardControls } from "@react-three/drei";
 import { Group, MathUtils, Vector3 } from "three";
 import { PLAYER_SPAWN, PLAYER_BOUNDS } from "../config/templeLayout";
 
@@ -16,8 +17,9 @@ export default function Player() {
     const PlayerRef = useRef<Group>(null);
     const [, getKeys] = useKeyboardControls<MovementAction>();
 
-    // Reuse one vector instead of allocating a new one every frame
-    const cameraPosition = useRef(new Vector3());
+    //Access the controls and reuse a vector for following the player
+    const controlsRef = useRef<ComponentRef<typeof OrbitControls>>(null);
+    const followOffset = useRef(new Vector3());
 
     // Update movement every frame without re-rendering the React component.
     useFrame((_, delta) => {
@@ -48,31 +50,33 @@ export default function Player() {
         player.position.z = MathUtils.clamp(player.position.z, PLAYER_BOUNDS.minZ, PLAYER_BOUNDS.maxZ);
     });
 
-    //Follow after the movement callback updates the player's position
-    useFrame(({ camera }, delta) => {
-        const player = PlayerRef.current;
+    // Move the camera and its orbit target together, preserving mouse rotation
+    useFrame(({ camera }, delta) => { 
+      const player = PlayerRef.current;
+      const controls = controlsRef.current;
 
-        if (!player) return;
+      if (!player || !controls) return;
 
-        //Postitive Z is behind a player facing toward the altar
-        cameraPosition.current.set(
-            player.position.x,
-            player.position.y + 2.2,
-            player.position.z + 3.5
-        )
+      const smoothing = 1 - Math.exp(-8 * delta);
+      
+      //Find the movement needed to bring the target toward the player
+      followOffset.current.set(
+        player.position.x,
+        player.position.y + 1,
+        player.position.z,
+      )
+      .sub(controls.target)
+      .multiplyScalar(smoothing);
 
-        //Frame-rate-indepentdent smoothing toward the desired camera position
-        const smoothing =  1 - Math.exp(-8 * delta);
-
-        camera.position.lerp(cameraPosition.current, smoothing);
-
-        //Look slightly above the player's feet
-        camera.lookAt(player.position.x, player.position.y + 1, player.position.z);
+    camera.position.add(followOffset.current);
+    controls.target.add(followOffset.current);
+    controls.update();
 });
 
 
     // Child meshes use local positions relative to the player's feet.
     return (
+      <>
       <group ref={PlayerRef} position={PLAYER_SPAWN}>
         {/* Player body */}
         <mesh position={[0, 0.5, 0]}>
@@ -91,5 +95,15 @@ export default function Player() {
           <meshStandardMaterial color="#e4be65" />
         </mesh>
       </group>
+
+      <OrbitControls ref={controlsRef} target={[ PLAYER_SPAWN[0], PLAYER_SPAWN[1] + 1, PLAYER_SPAWN[2],]} 
+      enablePan={false} 
+      enableDamping
+      minDistance={2}
+      maxDistance={4}
+      minPolarAngle={Math.PI / 6}
+      maxPolarAngle={Math.PI / 2.2}
+      />
+      </>
     );
 }
